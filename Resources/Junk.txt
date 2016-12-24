@@ -1,0 +1,31 @@
+Public Function GetSoftware() As String
+        Dim Software As String = Nothing
+        Dim SoftwareKey As String = "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"
+        Using rk As Microsoft.Win32.RegistryKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(SoftwareKey)
+            For Each skName As String In rk.GetSubKeyNames()
+                Using sk As Microsoft.Win32.RegistryKey = rk.OpenSubKey(skName)
+                    Try
+                        If Not (sk.GetValue("DisplayName") Is Nothing) Then
+                            If sk.GetValue("InstallLocation") Is Nothing Then
+                                Software += sk.GetValue("DisplayName") & " - Install path not known" & vbLf
+                            Else
+                                Software += (sk.GetValue("DisplayName") & " - ") + sk.GetValue("InstallLocation") & Environment.NewLine
+                            End If
+                        End If
+                    Catch ex As Exception
+                    End Try
+                End Using
+            Next
+        End Using
+        Return Software
+    End Function
+
+
+Public Function GetUptime() As String
+    Dim strResult As String = String.Empty
+    strResult += Math.Round(Environment.TickCount / 86400000) & " days, "
+    strResult += Math.Round(Environment.TickCount / 3600000 Mod 24) & " hours, "
+    strResult += Math.Round(Environment.TickCount / 120000 Mod 60) & " minutes, "
+    strResult += Math.Round(Environment.TickCount / 1000 Mod 60) & " seconds."
+    Return strResult
+End Function

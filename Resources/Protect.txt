@@ -1,0 +1,95 @@
+
+
+   Public Class cProtect
+        Public Sub ProtectProcess(bProtect As Boolean)
+            Dim hProc As IntPtr = GetCurrentProcess()
+            Dim bResult As Boolean = GetPrivilegs(SE_DEBUG_NAME)
+            Dim ProcessInfo As IntPtr = IntPtr.Zero
+
+            If bProtect = True Then
+                ProcessInfo = New IntPtr(29)
+            End If
+
+            NtSetInformationProcess(hProc, iBreakTermination, New IntPtr(VarPtr(ProcessInfo)), Marshal.SizeOf(ProcessInfo))
+        End Sub
+
+        Private Function GetPrivilegs(sPrivileg As String) As Boolean
+            Dim hToken As IntPtr
+            Dim hProc As IntPtr = GetCurrentProcess()
+            Dim lpLuid As New LUID()
+            Dim lpToken As New TOKEN_PRIVILEGES()
+            Dim lpAntToken As New TOKEN_PRIVILEGES()
+            Dim bRes As Boolean
+
+            bRes = OpenProcessToken(hProc, TOKEN_ADJUST_PRIVILEGES Or TOKEN_QUERY, hToken)
+            If Not bRes Then
+                Return False
+            End If
+
+            bRes = LookupPrivilegeValue(String.Empty, sPrivileg, lpLuid)
+            If Not bRes Then
+                Return False
+            End If
+
+            lpToken.Privileges = New LUID_AND_ATTRIBUTES(ANYSIZE_ARRAY - 1) {}
+            lpToken.PrivilegeCount = 1
+            lpToken.Privileges(0).Attributes = SE_PRIVILEGE_ENABLED
+            lpToken.Privileges(0).Luid = lpLuid
+
+            Dim lpAntTokenLen As UInteger = 0
+            bRes = AdjustTokenPrivileges(hToken, False, lpToken, Marshal.SizeOf(lpToken), lpAntToken, lpAntTokenLen)
+
+            Return bRes
+        End Function
+
+        Private Function VarPtr(o As Object) As Integer
+            Dim GC As GCHandle = GCHandle.Alloc(o, GCHandleType.Pinned)
+            Dim iRet As Integer = GC.AddrOfPinnedObject().ToInt32()
+            Return iRet
+        End Function
+
+        <DllImport("kernel32.dll")> _
+        Private Shared Function GetCurrentProcess() As IntPtr
+        End Function
+
+        <DllImport("advapi32.dll", SetLastError := True)> _
+        Private Shared Function OpenProcessToken(ProcessHandle As IntPtr, DesiredAccess As UInt32, TokenHandle As IntPtr) As <MarshalAs(UnmanagedType.Bool)> Boolean
+        End Function
+
+        <DllImport("advapi32.dll", SetLastError := True, CharSet := CharSet.Auto)> _
+        Private Shared Function LookupPrivilegeValue(lpSystemName As String, lpName As String, lpLuid As LUID) As <MarshalAs(UnmanagedType.Bool)> Boolean
+        End Function
+
+        <DllImport("advapi32.dll", SetLastError := True)> _
+        Private Shared Function AdjustTokenPrivileges(TokenHandle As IntPtr, <MarshalAs(UnmanagedType.Bool)> DisableAllPrivileges As Boolean, ByRef NewState As TOKEN_PRIVILEGES, BufferLengthInBytes As Int32, ByRef PreviousState As TOKEN_PRIVILEGES, ReturnLengthInBytes As UInt32) As <MarshalAs(UnmanagedType.Bool)> Boolean
+        End Function
+
+        <DllImport("ntdll.dll", EntryPoint := "NtSetInformationProcess")> _
+        Private Shared Function NtSetInformationProcess(<[In]> ProcessHandle As IntPtr, <[In]> ProcessInformationClass As Integer, <[In]> ProcessInformation As IntPtr, <[In]> ProcessInformationLength As Integer) As IntPtr
+        End Function
+
+        <StructLayout(LayoutKind.Sequential)> _
+        Private Structure LUID
+            Public LowPart As UInteger
+            Public HighPart As Integer
+        End Structure
+
+        <StructLayout(LayoutKind.Sequential)> _
+        Private Structure LUID_AND_ATTRIBUTES
+            Public Luid As LUID
+            Public Attributes As UInt32
+        End Structure
+
+        Private Structure TOKEN_PRIVILEGES
+            Public PrivilegeCount As UInt32
+            <MarshalAs(UnmanagedType.ByValArray, SizeConst := ANYSIZE_ARRAY)> _
+            Public Privileges As LUID_AND_ATTRIBUTES()
+        End Structure
+
+        Private Const TOKEN_QUERY As UInt32 = &H8
+        Private Const TOKEN_ADJUST_PRIVILEGES As UInt32 = &H20
+        Private Const SE_DEBUG_NAME As String = "SeDebugPrivilege"
+        Private Const SE_PRIVILEGE_ENABLED As UInt32 = &H2
+        Private Const ANYSIZE_ARRAY As Integer = 1
+        Private Const iBreakTermination As Integer = 29
+    End Class
